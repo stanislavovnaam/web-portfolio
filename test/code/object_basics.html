@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .product {
+            display: flex;
+            height: 300px;
+            background: lightblue;
+        }
+
+        .product img {
+            height: 100%;
+        }
+
+        .product #img-frame {
+            padding: 20px;
+        }
+
+        .product #info {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .product #info div {
+            background: #ecf3f5;
+            margin-bottom: 10px;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+  <nav>
+   <input type="text" placeholder="имя" id="name">
+   <input type="text" placeholder="ссылка картинки" id="url">
+   <input type="text" placeholder="цена" id="price">
+   <input type="text" placeholder="цвет" id="color">
+   <button onclick="AddProduct()">Добавить продукт</button>
+   </nav>
+   
+    <div class="product">
+        <div id="img-frame">
+            <img src="https://kartin.papik.pro/uploads/posts/2023-06/thumbs/1686736061_kartin-papik-pro-p-kartinki-krasivie-na-avatarku-priroda-zima-62.jpg" alt="">
+        </div>
+        <div id="info">
+            <div id="name">Имя</div>
+            <div id="type">тип</div>
+            <div id="size">размер</div>
+            <div id="color">цвет</div>
+            <div id="material">материал</div>
+            <div id="price">цена</div>
+            <div id="desc">описание</div>
+        </div>
+    </div>
+
+    <script>
+        class Product{
+            constructor(name, url, price, color){
+                this.name = name;
+                this.url = url;
+                this.price = price;
+                this.color = color;
+            }
+        }
+        
+        function AddProduct(){
+            let name = document.querySelector(".product #info #name").value
+            let url = document.querySelector(".product #info #url").value
+            let price = document.querySelector(".product #info #price").value
+            let color = document.querySelector(".product #info #color").value
+            
+            let product = new Product(
+                name,
+                url,
+                price,
+                color
+            )
+        }
+        
+        let newProduct = new Product("Футболка", "https://ir.ozone.ru/s3/multimedia-1-t/wc1000/7487749793.jpg", 1200, "Черный")
+        
+        console.log(newProduct["name"], newProduct)
+        /*let product = ["https://ir.ozone.ru/s3/multimedia-1-o/wc1000/7669625964.jpg",
+            "Комод с ящиками для одежды и хранения вещей белый Мебель от Саныча",
+            "Комод",
+            "23800",
+            "Белый",
+            "ЛДСП",
+            "3252", 
+           "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non omnis ut asperiores id repudiandae reiciendis error consequatur."
+        ]
+
+        document.body.innerHTML +=
+            `
+                <div class="product">
+                    <div id="img-frame">
+                <img src="${product[0]}" alt="">
+                        </div>
+                <div id="info">
+            <div id="name">${product[1]}</div>
+            <div id="type">${product[2]}</div>
+            <div id="size">${product[3]}</div>
+            <div id="color">${product[4]}</div>
+            <div id="material">${product[5]}</div>
+            <div id="price">${product[6]}</div>
+            <div id="desc">${product[7]}</div>
+        </div>
+    </div>
+        `
+        
+        let product2 = {
+            name: "Футболка Nike",
+            pice: 1200,
+            size: "L",
+            type: "футболка", 
+            color: "черный",
+            desc: "описание",
+            material: "полиэстер",
+            url: "https://ir.ozone.ru/s3/multimedia-1-t/wc1000/7487749793.jpg"
+        }
+        
+        document.body.innerHTML +=
+            `
+                <div class="product">
+                    <div id="img-frame">
+                <img src="${product2["url"]}" alt="">
+                        </div>
+                <div id="info">
+            <div id="name">${product[1]}</div>
+            <div id="price">${product[6]}</div>
+            <div id="type">${product[2]}</div>
+            <div id="size">${product[3]}</div>
+            <div id="color">${product[4]}</div>
+            <div id="material">${product[5]}</div>
+            <div id="desc">${product[7]}</div>
+        </div>
+    </div>
+        `*/
+    </script>
+</body></html>
