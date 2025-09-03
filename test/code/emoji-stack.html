@@ -5,67 +5,110 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <style>
-        #tower{
+        #tower {
             background: lightblue;
             height: 90vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
-            font-size: 6vh;
+            font-size: 4.5vh;
+            user-select: none;
+        }
+        #timeout{
+            font-size: 64px;
+            font-weight: 700;
+            font-family: monospace;
+            height: 90vh;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #wins {
+            text-align: center;
+            font-size: 33px;
+            font-weight: 700;
+            font-family: monospace;
         }
     </style>
 </head>
 
 <body>
-    <button onclick="AddEmoji()">Добавить</button>
-    <button onclick="DeleteEmoji()">Удалить</button>
-    <br>
+    <div id="wins">Wins:</div>
     <div id="tower" onclick="AddEmoji()"></div>
+    <div id="timeout">Time out</div>
     <script>
+        /*
+        план:
+        1. Выигрыш/проигрыш:
+            - счетчик побед
+            - счетчик времени
+            - ограничить количество эмоджи
+            
+        */
+
         let emojis = ['🧇', '🍞', '🥞']
         let tower = []
 
+        let wins = 0
+        let startTime = Date.now()
+        let currentTime = Date.now()
+        let gameTime = 10
+        let timer = gameTime
+
         function AddEmoji() {
             //document.body.innerHTML = emojis[Math.round(Math.random() * 2)]
-            tower.push(emojis[Math.round(Math.random() * 2)])
+            if (tower.length === 3) {
+                CheckWin()
+            } else {
+                tower.push(emojis[Math.round(Math.random() * 2)])
+
+            }
+            console.log(tower)
             Show()
-            CheckWin()
         }
 
-        function DeleteEmoji(event){
+        function DeleteEmoji(event) {
             tower.pop()
             Show()
             event.stopPropagation()
         }
-        
-        function Show(){
-            let i = tower.length-1
-             document.querySelector("#tower").innerHTML = ""
-            
-            while(i > 0){
-                 document.querySelector("#tower").innerHTML +=
-                     `<div onclick="DeleteEmoji(Event)">${tower[i]}</div>`
+
+        function Show() {
+            let i = tower.length - 1
+            document.querySelector("#tower").innerHTML = ""
+
+            while (i >= 0) {
+                document.querySelector("#tower").innerHTML +=
+                    `<div onclick="DeleteEmoji(Event)">${tower[i]}</div>`
                 i--
             }
-        }
-        
-        function CheckWin(){
-            if(tower.length === 15){
-                let i = 0
-                let chosenEmoji = tower[0]
-                while(i < tower.length){
-                    if(tower [i] === chosenEmoji){
-                        console.log(tower[i])
-                    }else{
-                        return
-                    }
-                    i++
-                }
-                console.log("winner")
+            currentTime = Date.now()
+            if (timer > 0)timer = gameTime - (currentTime - startTime)/1000
+            else{
+                document.querySelector("#tower").style.display = "none"
+                document.querySelector("#timeout").style.display = "flex"
             }
+            console.log(timer)
+        }
+
+        function CheckWin() {
+
+            let i = 0
+            let chosenEmoji = tower[0]
+            while (i < tower.length) {
+                if (tower[i] === chosenEmoji) {
+                    console.log(tower[i])
+                } else {
+                    return
+                }
+                i++
+            }
+            console.log("winner")
+            wins++
+            document.querySelector("#wins").textContent = "Wins:" + wins
+            tower = []
         }
     </script>
-</body>
-
-</html>
+</body></html>
