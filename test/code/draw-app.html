@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<title>Простой рисовальщик с заливкой и ластиком</title>
+<style>
+  #canvas {
+    border: 1px solid #000;
+    display: block;
+    margin-bottom: 10px;
+    touch-action: none; /* для сенсорных устройств */
+    cursor: crosshair;
+  }
+  .controls {
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="canvas" width="600" height="400"></canvas>
+
+<div class="controls">
+  <label>Инструмент: 
+    <select id="toolSelect">
+      <option value="brush">Кисть</option>
+      <option value="fill">Заливка</option>
+      <option value="eraser">Ластик</option>
+    </select>
+  </label>
+  <label>Цвет кисти: <input type="color" id="colorPicker" value="#000000"></label>
+  <label>Размер кисти: <input type="range" id="brushSize" min="1" max="30" value="5"></label>
+  <button id="clearBtn">Очистить холст</button>
+  <button id="saveBtn">Сохранить картинку</button>
+</div>
+
+<script>
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+  let currentTool = 'brush';
+
+  // Начальное состояние кисти
+  let brushColor = document.getElementById('colorPicker').value;
+  let brushSize = parseInt(document.getElementById('brushSize').value, 10);
+  ctx.strokeStyle = brushColor;
+  ctx.lineWidth = brushSize;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  // Фон холста (для ластика)
+  const canvasBgColor = '#ffffff';
+  ctx.fillStyle = canvasBgColor;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Смена инструмента
+  document.getElementById('toolSelect').addEventListener('change', (e) => {
+    currentTool = e.target.value;
+    if (currentTool === 'eraser') {
+      ctx.strokeStyle = canvasBgColor;
+    } else {
+      ctx.strokeStyle = brushColor;
+    }
+  });
+
+  // Изменение цвета кисти
+  document.getElementById('colorPicker').addEventListener('input', (e) => {
+    brushColor = e.target.value;
+    if (currentTool !== 'eraser') {
+      ctx.strokeStyle = brushColor;
+    }
+  });
+
+  // Изменение размера кисти
+  document.getElementById('brushSize').addEventListener('input', (e) => {
+    brushSize = parseInt(e.target.value, 10);
+    ctx.lineWidth = brushSize;
+  });
+
+  // Рисование кистью или ластиком
+  canvas.addEventListener('mousedown', (e) => {
+    if (currentTool === 'brush' || currentTool === 'eraser') {
+      drawing = true;
+      ctx.beginPath();
+      ctx.moveTo(e.offsetX, e.offsetY);
+    } else if (currentTool === 'fill') {
+      // Заливка замкнутой области
+      floodFill(e.offsetX, e.offsetY, hexToRgbaArray(brushColor));
+    }
+  });
+
+  canvas.addEventListener('mousemove', (e) => {
+    if (!drawing) return;
+    if (currentTool === 'brush' || currentTool === 'eraser') {
+      ctx.lineTo(e.offsetX, e.offsetY);
+      ctx.stroke();
+    }
+  });
+
+  canvas.addEventListener('mouseup', () => {
+    if (drawing) {
+      drawing = false;
+      ctx.closePath();
+    }
+  });
+
+  canvas.addEventListener('mouseout', () => {
+    if (drawing) {
+      drawing = false;
+      ctx.closePath();
+    }
+  });
+
+  // Очистка холста
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    ctx.fillStyle = canvasBgColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Вернуть кисть в нужный цвет после очистки
+    ctx.strokeStyle = (currentTool === 'eraser') ? canvasBgColor : brushColor;
+  });
+
+  // Сохранение рисунка
+  document.getElementById('saveBtn').addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.download = 'drawing.png';
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+
+  // Помощь для заливки (алгоритм flood fill, реализованный с помощью стека)
+  function floodFill(startX, startY, fillColor) {
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imgData.data;
+    const width = imgData.width;
+    const height = imgData.height;
+
+    const startPos = (startY * width + startX) * 4;
+    const startColor = [
+      data[startPos],
+      data[startPos + 1],
+      data[startPos + 2],
+      data[startPos + 3]
+    ];
+
+    if (colorsMatch(startColor, fillColor)) {
+      return; // Цвет совпадает - заливка не нужна
+    }
+
+    const pixelStack = [[startX, startY]];
+
+    while (pixelStack.length) {
+      const newPos = pixelStack.pop();
+      const x = newPos[0];
+      const y = newPos[1];
+
+      if (x < 0 || y < 0 || x >= width || y >= height) continue;
+
+      const pos = (y * width + x) * 4;
+      const currentColor = [
+        data[pos],
+        data[pos + 1],
+        data[pos + 2],
+        data[pos + 3]
+      ];
+
+      if (colorsMatch(currentColor, startColor)) {
+        data[pos] = fillColor[0];
+        data[pos + 1] = fillColor[1];
+        data[pos + 2] = fillColor[2];
+        data[pos + 3] = fillColor[3];
+
+        pixelStack.push([x + 1, y]);
+        pixelStack.push([x - 1, y]);
+        pixelStack.push([x, y + 1]);
+        pixelStack.push([x, y - 1]);
+      }
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+  }
+
+  function colorsMatch(c1, c2) {
+    return c1[0] === c2[0] &&
+           c1[1] === c2[1] &&
+           c1[2] === c2[2] &&
+           c1[3] === c2[3];
+  }
+
+  function hexToRgbaArray(hex) {
+    hex = hex.replace(/^#/, '');
+    if(hex.length === 3) {
+      hex = hex.split('').map(c => c + c).join('');
+    }
+    const bigint = parseInt(hex, 16);
+    return [
+      (bigint >> 16) & 255,
+      (bigint >> 8) & 255,
+      bigint & 255,
+      255
+    ];
+  }
+</script>
+
+</body>
+</html>
