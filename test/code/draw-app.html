@@ -1,205 +1,336 @@
+<!--
+Функции:
+    - Холст для рисования
+    - Размер, цвет кисти
+    - Заливка
+    - Очистка холста
+    - Сохранение рисунка
+    
+Новые функции:
+    - Заливка как отдельный инструмент
+    - Заливка замкнутых фигур
+    - Инструмент Ластик
+    - Шаг назад / Шаг вперед для исправлений
+-->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<title>Простой рисовальщик с заливкой и ластиком</title>
-<style>
-  #canvas {
-    border: 1px solid #000;
-    display: block;
-    margin-bottom: 10px;
-    touch-action: none; /* для сенсорных устройств */
-    cursor: crosshair;
-  }
-  .controls {
-    margin-bottom: 10px;
-  }
-</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Приложение для рисования</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #f0f0f0;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #toolbar {
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        #canvas {
+            border: 1px solid #333;
+            background: white;
+            cursor: crosshair;
+        }
+
+        button,
+        select,
+        input[type=color],
+        input[type=range] {
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+
+        label {
+            font-size: 14px;
+        }
+    </style>
 </head>
+
 <body>
 
-<canvas id="canvas" width="600" height="400"></canvas>
+    <div id="toolbar">
+        <label>Инструмент:
+            <select id="tool">
+                <option value="brush">Кисть</option>
+                <option value="fill">Заливка</option>
+                <option value="eraser">Ластик</option>
+            </select>
+        </label>
 
-<div class="controls">
-  <label>Инструмент: 
-    <select id="toolSelect">
-      <option value="brush">Кисть</option>
-      <option value="fill">Заливка</option>
-      <option value="eraser">Ластик</option>
-    </select>
-  </label>
-  <label>Цвет кисти: <input type="color" id="colorPicker" value="#000000"></label>
-  <label>Размер кисти: <input type="range" id="brushSize" min="1" max="30" value="5"></label>
-  <button id="clearBtn">Очистить холст</button>
-  <button id="saveBtn">Сохранить картинку</button>
-</div>
+        <label>Цвет:
+            <input type="color" id="color" value="#000000" />
+        </label>
 
-<script>
-  const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
-  let drawing = false;
-  let currentTool = 'brush';
+        <label>Размер:
+            <input type="range" id="size" min="1" max="50" value="5" />
+        </label>
 
-  // Начальное состояние кисти
-  let brushColor = document.getElementById('colorPicker').value;
-  let brushSize = parseInt(document.getElementById('brushSize').value, 10);
-  ctx.strokeStyle = brushColor;
-  ctx.lineWidth = brushSize;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
+        <button id="undo" title="Шаг назад">←</button>
+        <button id="redo" title="Шаг вперед">→</button>
+        <button id="clear">Очистить</button>
+        <button id="save">Сохранить</button>
+    </div>
 
-  // Фон холста (для ластика)
-  const canvasBgColor = '#ffffff';
-  ctx.fillStyle = canvasBgColor;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+    <canvas id="canvas" width="800" height="600"></canvas>
 
-  // Смена инструмента
-  document.getElementById('toolSelect').addEventListener('change', (e) => {
-    currentTool = e.target.value;
-    if (currentTool === 'eraser') {
-      ctx.strokeStyle = canvasBgColor;
-    } else {
-      ctx.strokeStyle = brushColor;
-    }
-  });
+    <script>
+        (() => {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            let drawing = false;
+            let tool = 'brush';
+            let brushColor = '#000000';
+            let brushSize = 5;
+            let lastX = 0,
+                lastY = 0;
 
-  // Изменение цвета кисти
-  document.getElementById('colorPicker').addEventListener('input', (e) => {
-    brushColor = e.target.value;
-    if (currentTool !== 'eraser') {
-      ctx.strokeStyle = brushColor;
-    }
-  });
+            let history = [];
+            let historyStep = -1;
+            const maxHistory = 50;
+            
+            // DOM элементы
+            const toolSelect = document.getElementById('tool');
+            const colorInput = document.getElementById('color');
+            const sizeInput = document.getElementById('size');
+            const undoBtn = document.getElementById('undo');
+            const redoBtn = document.getElementById('redo');
+            const clearBtn = document.getElementById('clear');
+            const saveBtn = document.getElementById('save');
 
-  // Изменение размера кисти
-  document.getElementById('brushSize').addEventListener('input', (e) => {
-    brushSize = parseInt(e.target.value, 10);
-    ctx.lineWidth = brushSize;
-  });
+            // Инициализация белого холста
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            saveHistory();
 
-  // Рисование кистью или ластиком
-  canvas.addEventListener('mousedown', (e) => {
-    if (currentTool === 'brush' || currentTool === 'eraser') {
-      drawing = true;
-      ctx.beginPath();
-      ctx.moveTo(e.offsetX, e.offsetY);
-    } else if (currentTool === 'fill') {
-      // Заливка замкнутой области
-      floodFill(e.offsetX, e.offsetY, hexToRgbaArray(brushColor));
-    }
-  });
+            
 
-  canvas.addEventListener('mousemove', (e) => {
-    if (!drawing) return;
-    if (currentTool === 'brush' || currentTool === 'eraser') {
-      ctx.lineTo(e.offsetX, e.offsetY);
-      ctx.stroke();
-    }
-  });
+            // Сохранить состояние холста в историю
+            function saveHistory() {
+                if (historyStep < history.length - 1) {
+                    history = history.slice(0, historyStep + 1);
+                }
+                if (history.length >= maxHistory) {
+                    history.shift();
+                    historyStep--;
+                }
+                history.push(canvas.toDataURL());
+                historyStep++;
+                updateUndoRedoButtons();
+            }
 
-  canvas.addEventListener('mouseup', () => {
-    if (drawing) {
-      drawing = false;
-      ctx.closePath();
-    }
-  });
+            function updateUndoRedoButtons() {
+                undoBtn.disabled = historyStep <= 0;
+                redoBtn.disabled = historyStep >= history.length - 1;
+            }
 
-  canvas.addEventListener('mouseout', () => {
-    if (drawing) {
-      drawing = false;
-      ctx.closePath();
-    }
-  });
+            // Нарисовать линию (кисть или ластик)
+            function drawLine(x1, y1, x2, y2) {
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.lineWidth = brushSize;
+                ctx.strokeStyle = tool === 'eraser' ? 'white' : brushColor;
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+            }
 
-  // Очистка холста
-  document.getElementById('clearBtn').addEventListener('click', () => {
-    ctx.fillStyle = canvasBgColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    // Вернуть кисть в нужный цвет после очистки
-    ctx.strokeStyle = (currentTool === 'eraser') ? canvasBgColor : brushColor;
-  });
+            // Получить позицию мыши относительно канваса
+            function getPos(e) {
+                const rect = canvas.getBoundingClientRect();
+                let x, y;
+                if (e.touches && e.touches.length) {
+                    x = e.touches[0].clientX - rect.left;
+                    y = e.touches[0].clientY - rect.top;
+                } else {
+                    x = e.clientX - rect.left;
+                    y = e.clientY - rect.top;
+                }
+                return {
+                    x,
+                    y
+                };
+            }
 
-  // Сохранение рисунка
-  document.getElementById('saveBtn').addEventListener('click', () => {
-    const link = document.createElement('a');
-    link.download = 'drawing.png';
-    link.href = canvas.toDataURL();
-    link.click();
-  });
+            // Алгоритм заливки (Flood fill)
+            function floodFill(x, y, fillColor) {
+                const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imgData.data;
 
-  // Помощь для заливки (алгоритм flood fill, реализованный с помощью стека)
-  function floodFill(startX, startY, fillColor) {
-    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imgData.data;
-    const width = imgData.width;
-    const height = imgData.height;
+                const width = canvas.width;
+                const height = canvas.height;
 
-    const startPos = (startY * width + startX) * 4;
-    const startColor = [
-      data[startPos],
-      data[startPos + 1],
-      data[startPos + 2],
-      data[startPos + 3]
-    ];
+                // Цвет пикселя в [r, g, b, a]
+                function getPixel(pos) {
+                    return [data[pos], data[pos + 1], data[pos + 2], data[pos + 3]];
+                }
+                // Сравнить цвета
+                function colorsMatch(a, b) {
+                    return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
+                }
+                // Записать цвет
+                function setPixel(pos, color) {
+                    data[pos] = color[0];
+                    data[pos + 1] = color[1];
+                    data[pos + 2] = color[2];
+                    data[pos + 3] = color[3];
+                }
 
-    if (colorsMatch(startColor, fillColor)) {
-      return; // Цвет совпадает - заливка не нужна
-    }
+                // Целевой цвет на исходном пикселе
+                const pxPos = (y * width + x) * 4;
+                const targetColor = getPixel(pxPos);
 
-    const pixelStack = [[startX, startY]];
+                // Цвет заливки
+                const fillRGBA = hexToRgba(fillColor);
 
-    while (pixelStack.length) {
-      const newPos = pixelStack.pop();
-      const x = newPos[0];
-      const y = newPos[1];
+                // Если цвета совпадают, ничего не заливать
+                if (colorsMatch(targetColor, fillRGBA)) return;
 
-      if (x < 0 || y < 0 || x >= width || y >= height) continue;
+                const stack = [];
+                stack.push([x, y]);
 
-      const pos = (y * width + x) * 4;
-      const currentColor = [
-        data[pos],
-        data[pos + 1],
-        data[pos + 2],
-        data[pos + 3]
-      ];
+                while (stack.length) {
+                    const [cx, cy] = stack.pop();
 
-      if (colorsMatch(currentColor, startColor)) {
-        data[pos] = fillColor[0];
-        data[pos + 1] = fillColor[1];
-        data[pos + 2] = fillColor[2];
-        data[pos + 3] = fillColor[3];
+                    const pos = (cy * width + cx) * 4;
+                    const currentColor = getPixel(pos);
 
-        pixelStack.push([x + 1, y]);
-        pixelStack.push([x - 1, y]);
-        pixelStack.push([x, y + 1]);
-        pixelStack.push([x, y - 1]);
-      }
-    }
+                    if (colorsMatch(currentColor, targetColor)) {
+                        setPixel(pos, fillRGBA);
 
-    ctx.putImageData(imgData, 0, 0);
-  }
+                        if (cx > 0) stack.push([cx - 1, cy]);
+                        if (cx < width - 1) stack.push([cx + 1, cy]);
+                        if (cy > 0) stack.push([cx, cy - 1]);
+                        if (cy < height - 1) stack.push([cx, cy + 1]);
+                    }
+                }
 
-  function colorsMatch(c1, c2) {
-    return c1[0] === c2[0] &&
-           c1[1] === c2[1] &&
-           c1[2] === c2[2] &&
-           c1[3] === c2[3];
-  }
+                ctx.putImageData(imgData, 0, 0);
+            }
 
-  function hexToRgbaArray(hex) {
-    hex = hex.replace(/^#/, '');
-    if(hex.length === 3) {
-      hex = hex.split('').map(c => c + c).join('');
-    }
-    const bigint = parseInt(hex, 16);
-    return [
-      (bigint >> 16) & 255,
-      (bigint >> 8) & 255,
-      bigint & 255,
-      255
-    ];
-  }
-</script>
+            // Преобразование HEX в RGBA (массив)
+            function hexToRgba(hex) {
+                hex = hex.replace('#', '');
+                let r, g, b;
+                if (hex.length === 3) {
+                    r = parseInt(hex[0] + hex[0], 16);
+                    g = parseInt(hex[1] + hex[1], 16);
+                    b = parseInt(hex[2] + hex[2], 16);
+                } else {
+                    r = parseInt(hex.substring(0, 2), 16);
+                    g = parseInt(hex.substring(2, 4), 16);
+                    b = parseInt(hex.substring(4, 6), 16);
+                }
+                return [r, g, b, 255];
+            }
 
-</body>
-</html>
+            // События рисования
+            function pointerDown(e) {
+                e.preventDefault();
+                const pos = getPos(e);
+                if (tool === 'fill') {
+                    floodFill(Math.floor(pos.x), Math.floor(pos.y), brushColor);
+                    saveHistory();
+                    return;
+                }
+                drawing = true;
+                lastX = pos.x;
+                lastY = pos.y;
+            }
+
+            function pointerMove(e) {
+                if (!drawing) return;
+                e.preventDefault();
+                const pos = getPos(e);
+                drawLine(lastX, lastY, pos.x, pos.y);
+                lastX = pos.x;
+                lastY = pos.y;
+            }
+
+            function pointerUp(e) {
+                if (!drawing) return;
+                drawing = false;
+                saveHistory();
+            }
+
+            // Обработчики toolbar
+            toolSelect.addEventListener('change', () => {
+                tool = toolSelect.value;
+                canvas.style.cursor = tool === 'fill' ? 'pointer' : 'crosshair';
+            });
+
+            colorInput.addEventListener('input', () => {
+                brushColor = colorInput.value;
+            });
+
+            sizeInput.addEventListener('input', () => {
+                brushSize = sizeInput.value;
+            });
+
+            undoBtn.addEventListener('click', () => {
+                if (historyStep <= 0) return;
+                historyStep--;
+                let img = new Image();
+                img.onload = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0);
+                };
+                img.src = history[historyStep];
+                updateUndoRedoButtons();
+            });
+
+            redoBtn.addEventListener('click', () => {
+                if (historyStep >= history.length - 1) return;
+                historyStep++;
+                let img = new Image();
+                img.onload = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0);
+                };
+                img.src = history[historyStep];
+                updateUndoRedoButtons();
+            });
+
+            clearBtn.addEventListener('click', () => {
+                ctx.fillStyle = 'white';
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                saveHistory();
+            });
+
+            saveBtn.addEventListener('click', () => {
+                const link = document.createElement('a');
+                link.download = 'drawing.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+
+            // Поддержка мыши и касаний
+            canvas.addEventListener('mousedown', pointerDown);
+            canvas.addEventListener('mousemove', pointerMove);
+            canvas.addEventListener('mouseup', pointerUp);
+            canvas.addEventListener('mouseleave', () => {
+                if (drawing) {
+                    drawing = false;
+                    saveHistory();
+                }
+            });
+
+            canvas.addEventListener('touchstart', pointerDown);
+            canvas.addEventListener('touchmove', pointerMove);
+            canvas.addEventListener('touchend', pointerUp);
+            canvas.addEventListener('touchcancel', pointerUp);
+        })();
+    </script>
+
+</body></html>

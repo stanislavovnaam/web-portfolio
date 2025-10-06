@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: antiquewhite;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #gallery {
+            padding: 20px;
+            width: 100%;
+        }
+
+        .user {
+            background-color: burlywood;
+            padding: 12px;
+            border-radius: 8px;
+            border: solid #ffbe6a 2px;
+            display: flex;
+            margin-bottom: 12px;
+        }
+
+        #profile-pic {
+            width: 64px;
+            height: 64px;
+            background-color: #edddb1;
+            display: inline-block;
+            margin-right: 12px;
+        }
+
+        #loader {
+            width: 40px;
+            height: 40px;
+            border-radius: 100%;
+            border: solid 5px;
+            border-color: transparent;
+            border-top-color: #f87676;
+            border-bottom-color: #f87676;
+            animation-name: LoaderAnim;
+            animation-duration: 0.7s;
+            animation-iteration-count: infinite;
+        }
+        @keyframes LoaderAnim{
+            100%{
+                transform: rotateZ(180deg)
+            }
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div id="gallery">
+        <div class="user">
+            <div id="profile-pic">
+                <img src="" alt="">
+            </div>
+            <div>
+                <div id="username">Username</div>
+                <div id="about">Lorem ipsum dolor sit amet.</div>
+            </div>
+        </div>
+    </div>
+    <div id="loader"></div>
+
+    <script>
+        let randomTime = Math.random() * 5000
+
+        setTimeout(LoadUser, randomTime)
+
+        function LoadUser() {
+            document.querySelector("#gallery").innerHTML +=
+                `<div class="user">
+               <div id="profile-pic">
+                   <img src="" alt="">
+               </div>
+               <div>
+                   <div id="username">Username</div>
+                   <div id="about">Lorem ipsum dolor sit amet.</div>
+               </div>
+              </div>`
+
+            randomTime = Math.random() * 5000
+
+            setTimeout(LoadUser, randomTime)
+        }
+
+    </script>
+
+</body>
+
+</html>
