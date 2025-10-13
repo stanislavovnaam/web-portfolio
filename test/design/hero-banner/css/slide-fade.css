@@ -1,0 +1,65 @@
+.slider {
+    overflow: hidden;
+    width: 400px;
+    height: 200px;
+    background-color: beige;
+    position: relative;
+}
+
+.slide-feed {
+    overflow: hidden;
+    width: 100%;
+    background-color: #000000;
+}
+
+img {
+    position: absolute;
+    width: 100%;
+    opacity: 0;
+}
+
+img:nth-child(1) {
+    animation: Fade;
+    animation-duration: 2s;
+    /animation-iteration-count: infinite;
+    animation-delay: 0s;
+}
+
+img:nth-child(2) {
+    animation: Fade;
+    animation-duration: 2s;
+    /animation-iteration-count: infinite;
+    animation-delay: 2s;
+}
+
+img:nth-child(3) {
+    animation: Fade;
+    animation-duration: 2s;
+    /animation-iteration-count: infinite;
+    animation-delay: 4s;
+}
+
+img:nth-child(4) {
+    animation: Fade;
+    animation-duration: 2s;
+    /animation-iteration-count: infinite;
+    animation-delay: 6s;
+}
+
+@keyframes Fade {
+    0% {
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
