@@ -1,42 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
     <style>
-        body{
+        body {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: lightgray;
+            background: gray;
         }
-        .picture{
+
+        .picture {
             position: relative;
             width: 60vw;
             height: 40vw;
             background-color: #74dfff;
             overflow: hidden;
-            animation: SkyAnim;
-            animation-duration: 15s;
+            animation-name: SkyAnim;
+            animation-duration: 6s;
             animation-iteration-count: infinite;
         }
-        @keyframes SkyAnim{
+        
+        @keyframes SkyAnim {
             15%{
-                 background-color: #74dfff
+                background-color: #74dfff;
             }
-            45%{
-                background-color: #3d7484;
+            40% {
+                background-color: #212f4a;
             }
-            75%{
-                background-color: #3d7484;
+            75% {
+                background-color: #212f4a;
             }
             100%{
                 background-color: #74dfff;
             }
         }
-        .sand{
+
+        .sand {
             position: absolute;
             bottom: 0;
             left: 0;
@@ -45,7 +49,8 @@
             background-color: #f2e267;
             z-index: 1;
         }
-        .pyramid{
+
+        .pyramid {
             position: absolute;
             bottom: 10%;
             left: 35%;
@@ -54,43 +59,44 @@
             background-color: #fdef82;
             transform: rotate(45deg);
         }
-        .sun{
+
+        .sun {
             width: 5vw;
             height: 5vw;
             background-color: yellow;
             border-radius: 100%;
-            /position: absolute;
-            right: 10%;
-            top: 10%;
-            margin-left: 7vw;
+            margin-left: 6vw;
         }
-        .moon{
+        
+        .moon {
             width: 5vw;
             height: 5vw;
-            background: white;
+            background-color: white;
             border-radius: 100%;
-            margin-right: 7vw;
+            margin-right: 6vw;
         }
-        .sun-moon-box{
+        
+        .sun-moon-box {
             width: 100%;
             position: absolute;
-            top: 50%;
+            top: 60%;
             left: 0;
             display: flex;
             justify-content: space-between;
-            animation: SunMoonAnim;
-            animation-duration: 17s; 
+            animation-name: SunMoonAnim;
+            animation-duration: 6s;
             animation-iteration-count: infinite;
             animation-timing-function: linear;
-            transform: rotate(90deg);
-            
+            transform: rotateZ(90deg)
         }
+        
         @keyframes SunMoonAnim{
             100%{
-                transform: rotate(450deg)
+                transform: rotateZ(450deg)
             }
         }
-        .cloud1{
+
+        .cloud1 {
             width: 15vw;
             height: 3.5vw;
             background-color: white;
@@ -98,7 +104,8 @@
             top: 15%;
             left: 0;
         }
-        .cloud2{
+
+        .cloud2 {
             width: 15vw;
             height: 3.5vw;
             background-color: white;
@@ -106,7 +113,8 @@
             top: 20%;
             left: 15%;
         }
-        .cloud3{
+
+        .cloud3 {
             width: 15vw;
             height: 3.5vw;
             background-color: white;
@@ -114,7 +122,8 @@
             top: 25%;
             right: 0;
         }
-        .cloud4{
+
+        .cloud4 {
             width: 15vw;
             height: 3.5vw;
             background-color: white;
@@ -122,40 +131,46 @@
             top: 30%;
             right: 15%;
         }
-        .clouds{
+
+        .clouds {
             position: absolute;
             width: 100%;
             height: 100%;
             transform: translateX(0%);
             animation-name: CloudsAnim;
-            animation-duration: 6s;
+            animation-duration: 12s;
             animation-iteration-count: infinite;
             animation-timing-function: linear;
         }
-        
-        @keyframes CloudsAnim{
-            100%{
+
+        @keyframes CloudsAnim {
+            100% {
                 transform: translateX(100%)
             }
         }
-        .clouds2{
+
+        .clouds2 {
+            position: absolute;
             width: 100%;
             height: 100%;
             transform: translateX(-100%);
             animation-name: CloudsAnim2;
-            animation-duration: 6s;
+            animation-duration: 12s;
             animation-iteration-count: infinite;
             animation-timing-function: linear;
         }
-        
-        @keyframes CloudsAnim2{
-            100%{
+
+        @keyframes CloudsAnim2 {
+            100% {
                 transform: translateX(0%)
             }
         }
         
+
+
     </style>
 </head>
+
 <body>
     <div class="picture">
         <div class="sand"></div>
@@ -178,4 +193,5 @@
         </div>
     </div>
 </body>
+
 </html>

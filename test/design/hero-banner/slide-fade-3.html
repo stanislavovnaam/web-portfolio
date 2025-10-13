@@ -8,14 +8,14 @@
             overflow: hidden;
             width: 400px;
             height: 200px;
-            background: #0b008e;
+            background: red;
             position: relative;
         }
 
         .slider-feed {
             overflow: hidden;
             width: 100%;
-            background: #6d6d6d;
+            background: green;
         }
 
         img {
@@ -24,6 +24,10 @@
             opacity: 0;
             transition: opacity 1s;
         }
+        
+        /*img:hover{
+            opacity: 1;
+        }*/
     </style>
 </head>
 
@@ -31,30 +35,30 @@
     <div class="slider">
         <div class="slide-feed">
             <img src="/test/design/img/random/1.jpg" alt="">
-            <img src="/test/design/img/random/2.webp" alt="">
+            <img src="/test/design/img/random/2.jpeg" alt="">
             <img src="/test/design/img/random/3.jpg" alt="">
             <img src="/test/design/img/random/4.jpg" alt="">
         </div>
     </div>
-    <button onclick="Left()">←</button>
-    <button onclick="Right()">→</button>
-
+    <button onclick="Left()">◀</button>
+    <button onclick="Right()">▶</button>
+    
     <script>
         let pictures = document.querySelectorAll("img")
         let prevIndex = 0
         let index = 0
-
-        function Left() {
+        
+        function Left(){
             index--
             ShowPicture()
         }
-
-        function Right() {
+        
+        function Right(){
             index++
             ShowPicture()
         }
-
-        function ShowPicture() {
+        
+        function ShowPicture(){
             pictures[index].style.opacity = 1
             pictures[prevIndex].style.opacity = 0
             prevIndex = index

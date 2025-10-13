@@ -1,15 +1,18 @@
 .slider {
-    border: solid 2px black;
+    border: solid 12px black;
     overflow: hidden;
     width: 50%;
+
 }
 
 .slide-feed {
     display: flex;
-    background-color: black;
+    background-color: aquamarine;
     overflow: hidden;
+
     width: 200%;
-    animation: SlideShow;
+
+    animation-name: SlideShow;
     animation-duration: 2s;
     animation-iteration-count: infinite;
     animation-timing-function: linear;

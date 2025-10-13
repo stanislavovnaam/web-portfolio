@@ -12,11 +12,24 @@
             height: 100vh;
             margin: 0;
             perspective: 500px;
+
         }
 
         main {
-            transform: rotateY(45deg) rotateX(45deg);
+            transform: translateY(100px) rotateY(35deg) rotateX(0deg);
             transform-style: preserve-3d;
+            background: pink;
+            height: 400px;
+            width: 20px;
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            animation: Spin;
+            animation-duration: 6s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
         }
 
         div {
@@ -28,23 +41,54 @@
 
         div:nth-child(1) {
             background: red;
+            transform: translateZ(50px)
         }
 
         div:nth-child(2) {
             background: green;
-            transform: translateX(-50px) rotateY(90deg) translateX(50px)
+            transform: rotateY(90deg) translateZ(50px)
+        }
+        
+        div:nth-child(3) {
+            background: blue;
+            transform: rotateY(180deg) translateZ(50px)
+        }
+        div:nth-child(4) {
+            background: orange;
+            transform: rotateY(270deg) translateZ(50px)
+        }
+
+        div:nth-child(5) {
+            background: lightblue;
+            transform: rotateX(90deg) translateZ(50px)
+        }
+        div:nth-child(6) {
+            background: lightgreen;
+            transform: rotateX(90deg) translateZ(-50px)
+        }
+        @keyframes Spin {
+            0% {
+                transform: translateY(100px) rotateY(0deg)
+            }
+
+            50% {
+                transform: translateY(-100px) rotateY(180deg)
+            }
+
+            100% {
+                transform: translateY(100px) rotateY(360deg)
+            }
         }
     </style>
-
 </head>
 
 <body>
     <main>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>4</div>
+        <div>5</div>
+        <div>6</div>
     </main>
 </body></html>
