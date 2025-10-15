@@ -39,7 +39,48 @@
             transform: rotateX(90deg);
             border-radius: 100%;
         }
-        
+        #tent{
+            transform-style: preserve-3d;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .wall{
+            position: absolute;
+        }
+        .wall:nth-child(1){
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, pink 47%, black, pink 52%);
+            transform: rotateZ(45deg) translateZ(100px) ;
+            border: black 2px solid;
+            
+        }
+        .wall:nth-child(2){
+            width: 200px;
+            height: 200px;
+            background: pink;
+            transform: translateX(-75px)rotateY(-90deg) rotateX(45deg);
+            border: black 2px solid;
+            
+        }
+        .wall:nth-child(3){
+            width: 100px;
+            height: 100px;
+            background:linear-gradient(45deg, pink 47%, black, pink 52%);
+            transform: rotateZ(45deg) translateZ(-100px) ;
+            border: black 2px solid;
+            
+        }
+        .wall:nth-child(4){
+            width: 200px;
+            height: 200px;
+            background: pink;
+            transform: translateX(75px)rotateY(90deg) rotateX(45deg);
+            border: black 2px solid;
+            
+        }
         @keyframes Spin {
             0% {
                 transform: translateY(100px) rotateY(0deg)
