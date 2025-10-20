@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            height: 100vh;
+            background: 
+                radial-gradient(15% 15% at 0 0, lightyellow, transparent),
+                0 0 linear-gradient(lightblue, pink, lightblue);
+                
+        }
+        
+    </style>
+</head>
+<body onmousemove="GetMouseXY(event)">
+    <script>
+        
+        let posY = 0
+        
+        function GetMouseXY(e){
+            console.log(e.clientX, e.clientY)
+            
+        document.body.style.background = `
+        radial-gradient(15% 15% at ${e.clientX}px ${e.clientY}px, lightyellow, transparent),
+        0 ${posY}px linear-gradient(lightblue, pink, lightblue)`
+        posY--
+        }
+        
+        setInterval(GetMouseXY, 10)
+    </script>
+</body>
+</html>
