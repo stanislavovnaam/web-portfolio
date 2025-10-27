@@ -1,0 +1,25 @@
+:root {
+            /* COLORS */
+            --color-bg: #f9f9fb;
+            --color-surface: #fad3e2;
+            --color-text: #222;
+            --color-muted: #666;
+            --color-primary: #ff0062;
+            --color-secondary: #ffc1e5;
+            --color-accent: #ff5f6d;
+
+            /* TYPOGRAPHY */
+            --font-heading: monospace;
+            --font-body: sans-serif;
+
+            /* SPACING */
+            --space-xs: 0.25rem;
+            --space-s: 0.5rem;
+            --space-m: 1rem;
+            --space-l: 2rem;
+            --space-xl: 4rem;
+
+            /* RADIUS & SHADOW */
+            --radius: 0.75rem;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <title>Document</title>
+    <style>
+        html{
+            
+        }
+        *{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        .main-header{
+            background: var(--color-secondary);
+            display: flex;
+        }
+        body{
+            background: var(--color-bg);
+        }
+        .main-header-icon{
+            margin: 1%;
+            background: var(--color-secondary);
+            width: 75px;
+            height: 75px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 100%;
+            overflow: hidden;
+        }
+        .main-header-icon img{
+            background: lightyellow;
+            width: 200%;
+        }
+        .main-nav{
+            flex-grow: 1;
+            display: flex;
+            gap:16px;
+            margin-bottom: 1%;
+            margin-top: 1%;
+        }
+        .main-header-h1{
+            background: var(--color-secondary);
+            font-size: 2.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .main-nav a{
+            text-decoration: none;
+            background: transparent;
+            flex-grow: 1;
+            display: flex;
+            font-size: 2rem;
+            justify-content: center;
+            align-items: center;
+        }
+        .main-nav a:hover{
+            background: var(--color-primary);
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="main-header-icon">
+            <img src="assets/imgs/russia_folder_icon_640.png" alt="">
+        </div>
+        <h1 class="main-header-h1">WEBSITE</h1>
+        <nav class="main-nav">
+            <a href="#">home</a>
+            <a href="#">design</a>
+            <a href="#">code</a>
+        </nav>
+    </header>
+</body>
+</html>
