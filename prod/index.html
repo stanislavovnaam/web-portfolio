@@ -1,80 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/header.css">
     <title>Document</title>
     <style>
-        html{
+        .hero {
+            background: pink;
+            height: 600px;
+        }
+
+        .hero-left {
+            display: flex;
+            width: 50%;
+            flex-direction: column;
+        }
+
+        .hero-fg {
+            background: red;
+            height: 100%;
+            display: flex;
+        }
+
+        .hero-fg-text {
+            background: blue;
+            width: 100%;
+            height: 80%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .hero-fg-h2 {
+            font-size: 3.5rem;
+        }
+
+        .hero-fg-p {
+            font-size: 1.5rem;
+        }
+
+        .hero-fg-buttons {
+            background: lightgreen;
+            width: 100%;
+            height: 20%;
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+            padding: 2rem;
+        }
+
+        .hero-fg-pbtn {
+            color: black;
+            background: white;
+            border: solid black 0.25rem;
+            padding: var(--space-m);
+            text-align: center;
+            text-decoration: none;
+            font-size: 1.25rem;
+            flex-grow: 1;
+
+        }
+
+        .hero-fg-sbtn {
+            color: black;
+            background: red;
+            border: solid black 0.25rem;
+            padding: var(--space-m);
+            text-align: center;
+            text-decoration: none;
+            font-size: 1.25rem;
+            flex-grow: 1;
+        }
+
+        .hero-fg-info {
+            background: green;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hero-fg-img1 {
+            background: red;
+            height: 200px;
+            width: 140px;
+            border-radius: 50%;
             
         }
-        *{
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        .main-header{
-            background: var(--color-secondary);
+        .hero-fg-info2 {
+            background: green;
+            width: 25%;
+            height: 100%;
             display: flex;
-        }
-        body{
-            background: var(--color-bg);
-        }
-        .main-header-icon{
-            margin: 1%;
-            background: var(--color-secondary);
-            width: 75px;
-            height: 75px;
-            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            border-radius: 100%;
-            overflow: hidden;
+            gap: 1rem;
         }
-        .main-header-icon img{
-            background: lightyellow;
-            width: 200%;
+
+        .hero-fg-img2 {
+            background: red;
+            height: 200px;
+            width: 140px;
+            border-radius: 50%;
+            
         }
-        .main-nav{
-            flex-grow: 1;
-            display: flex;
-            gap:16px;
-            margin-bottom: 1%;
-            margin-top: 1%;
+
+        .hero-fg-img3 {
+            background: red;
+            height: 200px;
+            width: 140px;
+            border-radius: 50%;
         }
-        .main-header-h1{
-            background: var(--color-secondary);
-            font-size: 2.5rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .main-nav a{
-            text-decoration: none;
-            background: transparent;
-            flex-grow: 1;
-            display: flex;
-            font-size: 2rem;
-            justify-content: center;
-            align-items: center;
-        }
-        .main-nav a:hover{
-            background: var(--color-primary);
+        .test{
+            background: pink;
+            height: 300px;
+            margin-bottom: 5px;
         }
     </style>
 </head>
+
 <body>
     <header class="main-header">
         <div class="main-header-icon">
             <img src="assets/imgs/russia_folder_icon_640.png" alt="">
         </div>
         <h1 class="main-header-h1">WEBSITE</h1>
-        <nav class="main-nav">
-            <a href="#">home</a>
-            <a href="#">design</a>
-            <a href="#">code</a>
+        <nav class="main-nav-box">
+            <a href="#" class="main-nav-dropdown">=</a>
+            <nav class="main-nav">
+                <a href="#">home</a>
+                <a href="#">design</a>
+                <a href="#">code</a>
+            </nav>
         </nav>
     </header>
+    <main>
+        <section class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-fg">
+                <div class="hero-left">
+                    <div class="hero-fg-text">
+                        <h2 class="hero-fg-h2">Lorem ipsum dolor.</h2>
+                        <p class="hero-fg-p">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quis ipsa deserunt laudantium a ab perspiciatis aspernatur repudiandae? Quam, explicabo, vel.</p>
+                    </div>
+                    <div class="hero-fg-buttons">
+                        <a class="hero-fg-pbtn" href="#">главная</a>
+                        <a class="hero-fg-sbtn" href="#test">дополнительная</a>
+                    </div>
+                </div>
+                <div class="hero-fg-info">
+                    <div class="hero-fg-img1">
+                        <img src="/test/design/img/random/1.jpg" alt="">
+                        <img src="/test/design/img/random/2.jpeg" alt="">
+                        <img src="/test/design/img/random/3.jpg" alt="">
+                    </div>
+                    <div class="hero-fg-info2">
+                    <div class="hero-fg-img2">
+                        <img src="/test/design/img/random/4.jpg" alt="">
+                        <img src="/test/design/img/random/p1.jpg" alt="">
+                        <img src="/test/design/img/random/p2.jpg" alt="">
+                    </div>
+                    <div class="hero-fg-img3">
+                        <img src="/test/design/img/random/p3.jpg" alt="">
+                        <img src="/test/design/img/random/p4.jpg" alt="">
+                        <img src="/test/design/img/random/1.jpg" alt="">
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="test"></section>
+        <section class="test"></section>
+        <section class="test" id="test"></section>
+    </main>
 </body>
+
 </html>
