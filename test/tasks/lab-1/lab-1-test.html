@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .hero {}
+
+        .hero-fg {
+            background: pink;
+            height: 70vw;
+            width: 100vw;
+        }
+
+        .hero-fg1 {
+            background: lightblue;
+            height: 60%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .fg1-info1 {
+            background: red;
+            height: 100%;
+            flex: 1;
+        }
+
+        .fg1-info1-h2 {
+            background: green;
+            height: 10%;
+            width: 100%;
+            position: relative;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .fg1-info1-p {
+            background: green;
+            height: 10%;
+            width: 100%;
+            position: relative;
+            top: 326px;
+            text-align: center;
+        }
+
+        .fg1-img {
+            /background: blue;
+            height: 100%;
+            flex: 1;
+        }
+
+        
+        .fg1-info2 {
+            background: green;
+            height: 100%;
+            flex: 1;
+        }
+
+        .fg1-info2-p {
+            background: red;
+            height: 10%;
+            width: 100%;
+            position: relative;
+            top: 367px;
+            text-align: center;
+        }
+
+        .hero-fg2 {
+            background: lightblue;
+            height: 40%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .fg2-imgs {
+            background: yellow;
+            height: 70%;
+            width: 100%;
+        }
+
+        .fg2-arrows {
+            background: brown;
+            height: 20%;
+            width: 100%;
+            position: absolute;
+            z-index: 1;
+            display: flex;
+            justify-content:space-around;
+            align-items: center;
+            gap: 80%;
+        }
+
+        .triangle1 {
+            border: solid black;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+            transform: rotate(135deg);
+            -webkit-transform: rotate(135deg);
+        }
+
+        .triangle2 {
+            border: solid black;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+            transform: rotate(-45deg);
+            -webkit-transform: rotate(-45deg);
+        }
+
+    </style>
+</head>
+
+<body>
+    <section class="hero">
+        <div class="hero-fg">
+            <div class="hero-fg1">
+                <div class="fg1-info1">
+                    <div class="fg1-info1-h2">
+                        <h2>Название сайта</h2>
+                    </div>
+                    <div class="fg1-info1-p">
+                        <p>8 800 555 35 35</p>
+                    </div>
+                </div>
+                <div class="fg1-img">
+                    <img src="/test/design/img/random/1.jpg" alt="">
+                </div>
+                <div class="fg1-info2">
+                    <div class="fg1-info2-p">
+                        <p>Lorem ipsum dolor sit amet.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-fg2">
+                <div class="fg2-imgs">
+                    
+                </div>
+                <div class="fg2-arrows">
+                    <div class="triangle1"></div>
+                    <div class="triangle2"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
